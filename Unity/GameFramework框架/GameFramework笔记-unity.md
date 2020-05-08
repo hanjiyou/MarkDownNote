@@ -11,7 +11,7 @@
 
 ## 1.2. 发射射线的3种方法
 ### 1.2.1. 与3D模型交互（模型需要碰撞器）
-```
+```c#
 Ray r=camera.ScreenPointToRay(Input.mousePosition)
 RaycastHit rh,
 if(Physics.Raycast(ray, out raycastHit)){
@@ -19,7 +19,7 @@ if(Physics.Raycast(ray, out raycastHit)){
 }
 ```
 ### 1.2.2. UI交互-PointerEventData与EventSystem
-```
+```c#
 PointerEventData ped=new PointerEventData(EventSystem.current);
 ped.position=Input.mousePosition;
 List<RaycastResult> results=new List<RaycastResult>();
@@ -35,6 +35,7 @@ GraphicRaycaster raycaster=XXX;
 raycaster.Raycast(ped,results);
 ```
 *注意：点击的UI对象必须得开启Raycast Target，否则RaycastResult检测不到*
+
 ## 1.3. Editor总结
 1. 普通的Editor直接使用[MenuItem]特性指定静态方法，会在菜单栏生成自定义的选项
 2. 控制Inspector监视面板的Editor:

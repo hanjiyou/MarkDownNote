@@ -34,12 +34,14 @@
 19. [Unity-Loom的多线程研究及优化](https://blog.csdn.net/wlz1992614/article/details/52326881)
 20. [Unity IL2CPP基础](https://blog.csdn.net/final5788/article/details/100183528)
 21. [官方红点教程](https://mp.weixin.qq.com/s/dLRiH3p_Pl9r5bQHOEAApg)
+22. [FGUI 实现3DUI效果](https://blog.csdn.net/wangjiangrong/article/details/96429081)
 
 ## 软件
 
 1. [腾讯lua编辑器](https://luaperfect.net/article/Download/)
 2. [日本新游戏引擎](http://xenko.com/)
 3. [adbGUI](https://www.52pojie.cn/forum.php?mod=viewthread&tid=648257&tdsourcetag=s_pcqq_aiomsg)
+4. [好用的翻译工具](https://www.deepl.com/translator)
 
 ## 工具
 
@@ -57,3 +59,9 @@
 3. [Unity 的GraphView 貌似是画依赖关系图的](https://github.com/Unity-Harry/Unity-AssetDependencyGraph?tdsourcetag=s_pcqq_aiomsg)
 4. [ETCore包含C#游戏框架ETServer的服务器、客户端独立版本。帧同步，状态同步demo都包含](https://github.com/roubingcode/ETCore)
 
+## 网站
+
+1. [Shader牛逼效果网站](https://www.shadertoy.com/)
+
+## 其他各种常识
+1.`json.net`就是Newtonsoft.json。 这个插件不要使用官网的,unity不支持，要使用从assetStore上下载的
