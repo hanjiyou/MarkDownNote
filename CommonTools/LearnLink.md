@@ -64,4 +64,6 @@
 1. [Shader牛逼效果网站](https://www.shadertoy.com/)
 
 ## 其他各种常识
-1.`json.net`就是Newtonsoft.json。 这个插件不要使用官网的,unity不支持，要使用从assetStore上下载的
+​	1.`json.net`就是Newtonsoft.json。 这个插件不要使用官网的,unity不支持，要使用从assetStore上下载的
+
+2. [rider新版破解教程](https://zhile.io/2018/08/17/jetbrains-license-server-crack.html)
