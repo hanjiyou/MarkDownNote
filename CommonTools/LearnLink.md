@@ -35,6 +35,7 @@
 20. [Unity IL2CPP基础](https://blog.csdn.net/final5788/article/details/100183528)
 21. [官方红点教程](https://mp.weixin.qq.com/s/dLRiH3p_Pl9r5bQHOEAApg)
 22. [FGUI 实现3DUI效果](https://blog.csdn.net/wangjiangrong/article/details/96429081)
+23. [Unity同时计入微信和支付宝支付Android篇 aar包和jar包](https://blog.csdn.net/songyu_95/article/details/88248350)
 
 ## 软件
 
@@ -62,6 +63,10 @@
 ## 网站
 
 1. [Shader牛逼效果网站](https://www.shadertoy.com/)
+
+# Unity牛逼效果
+
+1. [Unity3D游戏开发中100+效果的实现和源码大全](https://mp.weixin.qq.com/s?__biz=MzUxMDM3MTYwNQ==&mid=2247487026&idx=1&sn=442efa67e68f323aaa2e2077f80ecce9&chksm=f902bc48ce75355ed8fd99975c1964c3e38455ad6ba36086be7e8cb6ea2797e973b05cafda85&mpshare=1&scene=1&srcid=0514C68iFb56x6tMbCW8N8fG&sharer_sharetime=1589440720519&sharer_shareid=50500a25b9f806f57cc83fcbdca79bb7&key=fac323af831455810d934f32430e2391a9c77e66d73a8bb10a5c2b8b763466a7cd67ab640eff7ec098f90701bf17638ba4d2795b001f85368574a193499bd9f8efeec3dde94d3bf1df03cbe971f49c23&ascene=1&uin=MjM2MzQ4Mjk4MA%3D%3D&devicetype=Windows+7+x64&version=62090070&lang=zh_CN&exportkey=Ac0IU9BdPmLP7K9Zfn%2B7zo0%3D&pass_ticket=ZSkbzIqEbBEmNjYxioFAIKakLh%2BezH45KzKmKXFq1pFVWfaiz5e2mTf5JxG67tNk)
 
 ## 其他各种常识
 ​	1.`json.net`就是Newtonsoft.json。 这个插件不要使用官网的,unity不支持，要使用从assetStore上下载的
