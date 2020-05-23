@@ -52,6 +52,7 @@
 4. [少数人VPN新站](https://xn--gmqz83awjh.cc/user)
 5. [github代下载网址](https://g.widora.cn/)
 6. rider+emmylua调试lua，版本为Rider(2019.3)+EmmyLua(1.2.10)。EmmyLua[下载地址](https://plugins.jetbrains.com/plugin/9768-emmylua/versions)
+7. [腾讯VSCode lua调试插件](https://github.com/Tencent/LuaPanda.git)
 
 ## git仓库
 

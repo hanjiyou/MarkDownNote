@@ -292,3 +292,87 @@ l:光源方向 n:表面法线 a:n和l的夹角
 * `TRANSFER_SHADOW(v2f)` 用在vert函数中，用于填充采样阴影纹理坐标。
 * `SHADOW_ATTENUATIOn(v2f)` 用在 frag函数中，用于采样阴影纹理
 * `UNITY_LIGHT_ATTENUATION` 内置宏 用于计算光照衰减和阴影 参数("atten",v2f,worldPos)，这样basspass和addpass 就不用分别再计算阴影和光照了  同时使用该宏即可，区别是前者需要计算环境光。
+
+# 第10章 高级纹理
+
+## 10.1 立方体纹理
+
+1. 概念
+
+   * **立方体纹理**是**环境映射**的一种实现方法。环境映射可以模拟物体周围的环境，而使用环境映射的物体看起来像镀金属一样反射出周围的环境
+   * 共包含6张图像，对应立方体的6个面。
+   * 采样方法：采样需要使用三维纹理坐标，表示从立方体中心出发，向外部伸展与立方体的交点得到采样结果。
+   * 优缺点
+     * 简单快速，效果好
+     * 引入新物体、光源，或物体移动时，我们需要重新生成立方体纹理；仅仅可以反射环境，不能反射使用该立方体纹理的物体本身，**因为立方体纹理不能模拟多次反射的结果**
+
+2. 天空盒子
+
+   * 纹理的 `Wrap Mode`需要设为 `Clamp`，防止接缝处出现不匹配
+
+   * 代码生成立方体纹理（在向导编辑器 `ScriptableWizard` 中执行） ，格式是 ".cubemap"，需要勾选 `Readable` 否则无法动态渲染。
+
+     ```c#
+     	void OnWizardCreate () {
+     		// create temporary camera for rendering
+     		GameObject go = new GameObject( "CubemapCamera");
+     		go.AddComponent<Camera>();
+     		// place it on the object
+     		go.transform.position = renderFromPosition.position;
+     		// render into cubemap		
+     		go.GetComponent<Camera>().RenderToCubemap(cubemap);//关键代码 根据当前相机 渲染指定的cubemap
+     		
+     		// destroy temporary camera
+     		DestroyImmediate( go );
+     	}
+     ```
+
+3. 反射
+   * 立方体纹理的反射与高光反射的区别
+     * 计算后者漫反射的公式是  "L r=reflect(-l,n)" ，即通过入射光和法线计算高光反射方向
+     * 前者公式是 "ref=reflect(-v,n)" ，根据光路可逆的原则，由观察方向和法线，计算出反射方向的立方体纹理坐标（方向）。然后根据纹理坐标 直接对立方体纹理进行采样（无需归一化）即可。
+     * 相关变量和函数
+       * `texCUBE(_Cubemap,ref)` 根据坐标采样立方体纹理
+       * `lerp(diffuse,reflection,_refScale)` 在漫反射和环境反射之前根据比例取值（_refScale决定的是后一个参数的占比）
+   
+4. 折射
+
+   * **斯涅耳定律**计算反射角
+
+![image-20200520174400260](D:\Note\MarkDownNote\Unity\图形学\_v_images\image-20200520174400260.png)
+
+		* 对于透明物体来说，更准备的模拟放射是进行两次折射：进入和射出。但我们通常仅模拟第一次折射
+		* 最终颜色是 `ambient+lerp(diffuse,refraction,_refractAmount)*atten` 需要计算衰减、阴影
+  * 内置函数
+    * `refract(-v,n,入射光折射率/折射光介质的折射率)` 
+
+5. 菲涅尔反射
+   * 光线照射在物体表面，反射光和入射光之间存在一定比率关系。如湖面，脚边的水面是透明的（折射），远处只能看看到反射
+   * 菲涅尔反射近似等式![image-20200520175722777](D:\Note\MarkDownNote\Unity\图形学\_v_images\image-20200520175722777.png)
+   * 在顶点着色器中计算观察和反射方向，在片元中计算菲涅尔反射
+   * 需要计算阴影和衰减
+
+## 10.2 渲染纹理
+
+1. 镜子效果（Render Texture）
+   * 搭建：镜子的相机+render Texture(指定给镜子相机的Render Target)
+   * Shader中，需要翻转纹理的x（x=1-x），因为镜子显示的图像都是左右相反的
+2. 玻璃效果(Grab pass)
+   * `GrabPass{"_RefractionTex"}` 通常用于渲染透明物体（队列需要是透明队列），定义该Pass后Unity会把当前屏幕图像绘制在文立中，以便我们在后续Pass中访问。 抓屏纹理对应两个CG变量，分别是 `_RefractionTex` 抓屏纹理和 `_RefractionTex_TexelSize`代表抓屏纹素大小（纹理分辨率的倒数）
+   * 计算玻璃产生的折射。切线空间发现X折射度X纹素大小
+   * ![image-20200522153631166](D:\Note\MarkDownNote\Unity\图形学\_v_images\image-20200522153631166.png)
+   * 相关函数
+     * `ComputeScreenPos` 计算屏幕坐标
+     * `ComputeGrabScreenPos(clipPos)` 给定裁剪pos，返回对应的抓取的屏幕纹理的uv， 和上基本类似，最大不同是针对平台差异处理了采样坐标的问题
+3. 渲染纹理与GrabPass比较
+   * 步骤上来讲，后者简单
+   * 效率上，前者好，尤其是移动设备
+     * 前者可以通过控制相机渲染的层减少二次渲染场景大小
+     * 后者抓屏的图像分辨率和屏幕一样，在高分辨率设备会造成严重的贷款影响。最主要的是，需要CPU直接读取back buffer中的数据，破坏了CPU和GPU的并行性。
+4. 命令缓冲：Unity 5引入了命令缓冲允许我们扩展渲染流水线，使用它，也可以得到类似抓屏的效果，在不透明物体渲染后把当前图像复制到临时的渲染目标纹理，然后进行额外的操作，比如模糊。
+
+# 第11章 动画
+
+1. Unity Shader内置的时间变量。**动画效果往往都是把时间添加到一些变量的计算中**，让在时间变化时画面也变化。
+
+![image-20200522143619199](D:\Note\MarkDownNote\Unity\图形学\_v_images\image-20200522143619199.png)
