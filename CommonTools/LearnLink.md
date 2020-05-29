@@ -69,7 +69,12 @@
 
 1. [Unity3D游戏开发中100+效果的实现和源码大全](https://mp.weixin.qq.com/s?__biz=MzUxMDM3MTYwNQ==&mid=2247487026&idx=1&sn=442efa67e68f323aaa2e2077f80ecce9&chksm=f902bc48ce75355ed8fd99975c1964c3e38455ad6ba36086be7e8cb6ea2797e973b05cafda85&mpshare=1&scene=1&srcid=0514C68iFb56x6tMbCW8N8fG&sharer_sharetime=1589440720519&sharer_shareid=50500a25b9f806f57cc83fcbdca79bb7&key=fac323af831455810d934f32430e2391a9c77e66d73a8bb10a5c2b8b763466a7cd67ab640eff7ec098f90701bf17638ba4d2795b001f85368574a193499bd9f8efeec3dde94d3bf1df03cbe971f49c23&ascene=1&uin=MjM2MzQ4Mjk4MA%3D%3D&devicetype=Windows+7+x64&version=62090070&lang=zh_CN&exportkey=Ac0IU9BdPmLP7K9Zfn%2B7zo0%3D&pass_ticket=ZSkbzIqEbBEmNjYxioFAIKakLh%2BezH45KzKmKXFq1pFVWfaiz5e2mTf5JxG67tNk)
 
-## 其他各种常识
+# 各种常识
 ​	1.`json.net`就是Newtonsoft.json。 这个插件不要使用官网的,unity不支持，要使用从assetStore上下载的
 
 2. [rider新版破解教程](https://zhile.io/2018/08/17/jetbrains-license-server-crack.html)
+
+# Unity或C#相关
+
+1. [协程底层原理 迭代器+分帧+延迟等待计时器](https://www.cnblogs.com/yespi/p/9847533.html#case1--%E5%88%86%E5%B8%A7)
+2. [C# 字典底层原理 Hash算法+Hash碰撞冲突解决](https://www.cnblogs.com/InCerry/p/10325290.html)
