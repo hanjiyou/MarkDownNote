@@ -375,7 +375,61 @@ Fgui包名:"BattleUI.BattleItemSettlementWindowV2",对应窗口枚举类型：`B
    * 读取 `StreamingAssets`下的版本文件时，需要通过Unity自带的类 `WWW`或者 `UnityWebRequest`来读取，否则只能使用其他软件来查看.jar内的文件并获取。原因如下
      * 原因:安卓平台下，该文件夹下的所有文件都会被压缩到jar中(不是java类库，是一种压缩格式)，通过一般路径直接打开会有问题。 IOS上不存在该问题，但是是只读的。WebGL平台下没有文件权限访问，也可通过 `WWW`访问
 
-## 项目战斗Lua流程
+## 项目战斗详细流程
 
-### 
+### C#流程
+
+1. 登录游戏的流程
+
+   * `GameEngine.InitOther` 登录时进行一系列的初始化，包括 `BattleManager.Init()`
+
+   * `BattleManager.Init()`流程
+
+     * 首先初始化Lua接口 `BattleLuaInterface.Init()`。过程如下：注册 `BattleMsgDefine`到一个新表，使用表名保存到luaenv的全局表中(lua就可以直接使用)。也可以这样直接在C#中设置lua的全局变量 。然后加载 `BattleInterface`Lua文件，并获取到该文件中的各个关键方法(保存到LuaFunction)。
+
+       ```c#
+               LuaTable msgConst = luaenv.NewTable();
+               var itr = GameEngine.Ins.DataMgr.constantDataSet.ConstanList.GetEnumerator();
+               while (itr.MoveNext())
+               {
+                   ConstanTableData tableData = itr.Current as ConstanTableData;
+                   msgConst.Set(tableData.name, tableData.value);
+               }
+       
+               luaenv.Global.Set("ConstTableData", msgConst);//设置lua的全局Table
+               luaenv.Global.Set("isUseDebug", GameEngine.Ins.luaDebug);//设置lua全局变量
+               luaenv.DoString("require 'BattleLib/BattleInterface'");
+               initFunc = luaenv.Global.Get<LuaFunction>("Battle_InitManager");
+               createFunc = luaenv.Global.Get<LuaFunction>("Battle_CreateRoom");
+       ```
+
+     * 分别初始化 `GameBattle_InitSkill` 和 `GameBattle_InitSummoned`的数据 发送到Lua，Lua会接受保存这两条消息的数据，不会回包
+
+2. 进入战斗的流程
+
+* 从战斗入口，打开战队配置界面(包含战斗的基本信息：levelInfoId、战斗类型等)
+* 战队配置界面选好阵容，保存到服务器和本地，发送 `enterScene`消息
+* 收到 `enterSceneRet`消息进行处理：保存阵容、备份窗口（战斗退出恢复界面的时候用到）
+  * `CreateBattleRoom` 调用lua的 `room.new()`创建新房间
+  * 填充 `GameBattle_Init`消息的各种数据（**lua战斗计算的数据来源**），发送给lua，lua会调用 `root.init`初始化房间的数据。然后lua回包给C#
+  * `BattleLuaInterface.OnMsgBack` 是C#提供的lua调用的回包函数。
+* lua端处理后，会抛出 `GameBattle_Init`战斗事件，C#收到该消息，并派发 `TransmitMod`事件进入 loading逻辑
+* `LoadingManager` 监听 `TransmitMod`事件，然后在 `GameEngine.TransmitLater`根据参数的type 切换到不同的 `Mod.Init()`
+
+2. 详细步骤（暂时不写 没必要）
+
+* 大地图。填充`levelInfoId`、`SceneType`(玩法类型)、`TeamTag`(一般是pve)，打开战队配置界面
+
+* 战队配置界面。配置队伍后保存当前队伍(①发送给服务器 ②更新ServerTeamData ③保存到本地UserClientData)，调用 `ZodiacGoToFightLogic`进入战斗逻辑，会发送 `GameMessage_CGEnterScene`消息
+
+* 收到 `EnterSceneRet`回包后，备份当前窗口，再次更新ServerTeamData，调用 `BattleManager.OnEnterSceneRet`
+
+* `BattleManager`收到回包后，填充 `GameBattle_Init`，并发送给lua战斗。填充数据如下：
+* 直接从LevelInfo表里填充或固定的数据：`configId` 即levelId、`battleType`战斗类型、`energyCostType`消耗能量方式、`initEnergy` 初始能量值、`initSp`初始鬼火、`addSpList`每次充能满增加鬼火、`energyType` 能量类型列表（2个，敌我？）
+  
+* 根据 回包的英雄数据，添加到 `initMsg.heros`中，注意Leader和Hero的区别，然后将Leader和Hero的数据统一封装到BattleHeroInfo中。
+
+
+
+### Lua流程
 
