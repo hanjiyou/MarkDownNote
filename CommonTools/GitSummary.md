@@ -57,4 +57,7 @@
 
      `git config --global --unset https.proxy`
 
-     
+## 四、git常用操作
+
+1. 查看仓库地址 `git remote -v`![image-20200608145421189](D:\Note\MarkDownNote\CommonTools\_v_images\image-20200608145421189.png)
+

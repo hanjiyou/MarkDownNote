@@ -408,13 +408,21 @@ Fgui包名:"BattleUI.BattleItemSettlementWindowV2",对应窗口枚举类型：`B
 2. 进入战斗的流程
 
 * 从战斗入口，打开战队配置界面(包含战斗的基本信息：levelInfoId、战斗类型等)
+
 * 战队配置界面选好阵容，保存到服务器和本地，发送 `enterScene`消息
+
 * 收到 `enterSceneRet`消息进行处理：保存阵容、备份窗口（战斗退出恢复界面的时候用到）
   * `CreateBattleRoom` 调用lua的 `room.new()`创建新房间
   * 填充 `GameBattle_Init`消息的各种数据（**lua战斗计算的数据来源**），发送给lua，lua会调用 `root.init`初始化房间的数据。然后lua回包给C#
   * `BattleLuaInterface.OnMsgBack` 是C#提供的lua调用的回包函数。
-* lua端处理后，会抛出 `GameBattle_Init`战斗事件，C#收到该消息，并派发 `TransmitMod`事件进入 loading逻辑
-* `LoadingManager` 监听 `TransmitMod`事件，然后在 `GameEngine.TransmitLater`根据参数的type 切换到不同的 `Mod.Init()`
+  
+* lua端在初始化房间后，会抛出 `GameBattle_Init`战斗事件，C#收到该消息，并派发 `TransmitMod`事件进入 loading逻辑
+
+* `LoadingManager` 监听 `TransmitMod`事件，然后 `BattleMod.Init()`初始化battleMod，执行加载战斗场景的资源。
+
+* 加载场景完毕后，C#发送 `GameBattle_Start`消息到lua端。
+
+  
 
 2. 详细步骤（暂时不写 没必要）
 
@@ -432,4 +440,31 @@ Fgui包名:"BattleUI.BattleItemSettlementWindowV2",对应窗口枚举类型：`B
 
 
 ### Lua流程
+
+1. 进入战斗的流程
+
+   * C#调用 `luainter.CreateBattleRoom` 创建房间，收到C#传来的   `GameBattle_Init`消息对房间初始化 `root:Init(initMsg)`，然后自动回包相同类型的包给 C#
+
+   * 收到 `GameBattle_Start`消息，`SwitchState(BattleStart)`  切换房间状态到开始状态，`Tick()`中循环判断
+
+     ```lua
+     function RoundStateManager:Tick()
+       if self.nextState ~= RoomStatusEnum.None then
+         self.curState = self.nextState
+         local params = self.nextStateParams
+         self.nextState = RoomStatusEnum.None
+         self.nextStateParams = nil
+         local state = self.roundState[self.curState]
+         if state then
+           state:OnEnter(params)
+         end
+       end
+       local state = self.roundState[self.curState]
+       if state ~= nil then
+         state:Tick()
+       end
+     end
+     ```
+
+   2. 
 
