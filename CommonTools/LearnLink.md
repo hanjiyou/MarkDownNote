@@ -36,6 +36,7 @@
 21. [官方红点教程](https://mp.weixin.qq.com/s/dLRiH3p_Pl9r5bQHOEAApg)
 22. [FGUI 实现3DUI效果](https://blog.csdn.net/wangjiangrong/article/details/96429081)
 23. [Unity同时计入微信和支付宝支付Android篇 aar包和jar包](https://blog.csdn.net/songyu_95/article/details/88248350)
+24. [shaderLab API文档](https://blog.csdn.net/ABigDeal/article/details/89236422)
 
 ## 软件
 
@@ -50,9 +51,10 @@
 2. [节假日判断链接 发送get请求](http://www.easybots.cn/api/holiday.php?d=20200324)
 3. [下载git上的单个文件的网址](https://minhaskamal.github.io/DownGit/#/home)
 4. [少数人VPN新站](https://xn--gmqz83awjh.cc/user)
-5. [github代下载网址](https://g.widora.cn/)
-6. rider+emmylua调试lua，版本为Rider(2019.3)+EmmyLua(1.2.10)。EmmyLua[下载地址](https://plugins.jetbrains.com/plugin/9768-emmylua/versions)
-7. [腾讯VSCode lua调试插件](https://github.com/Tencent/LuaPanda.git)
+5. [upnet007 vpn](https://upnet007.vip/index)
+6. [github代下载网址](https://g.widora.cn/)
+7. rider+emmylua调试lua，版本为Rider(2019.3)+EmmyLua(1.2.10)。EmmyLua[下载地址](https://plugins.jetbrains.com/plugin/9768-emmylua/versions)
+8. [腾讯VSCode lua调试插件](https://github.com/Tencent/LuaPanda.git)
 
 ## git仓库
 

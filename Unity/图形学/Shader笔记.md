@@ -376,3 +376,49 @@ l:光源方向 n:表面法线 a:n和l的夹角
 1. Unity Shader内置的时间变量。**动画效果往往都是把时间添加到一些变量的计算中**，让在时间变化时画面也变化。
 
 ![image-20200522143619199](D:\Note\MarkDownNote\Unity\图形学\_v_images\image-20200522143619199.png)
+
+## 纹理动画
+
+1. 序列帧动画
+
+   * 一般都是透明纹理，需要关闭深度写入、设置队列为透明、忽略投影
+
+   * 本质算法（片元着色器中？）：
+
+     * 先根据时间，算出当前对应的子图像的整数(floor)行列下标
+     * 然后根据总行列数，对整个uv进行等分，得到子图形的纹理坐标范围
+     * 根据当前行列下表，对自图形纹理坐标进行偏移。
+
+   * 代码块如下
+
+     ```hlsl
+     			fixed4 frag(v2f i):SV_TARGET{
+     				float time=floor(_Time.y*_Speed);//floor 返回<=x的最大整数 x的下层整数
+     				float rowIndex=floor(time/_HorizontalCount);
+     				float colIndex=time-rowIndex*_HorizontalCount;
+     				float2 uv=float2(i.uv.x/_HorizontalCount,i.uv.y/_VerticalCount);//对整个uv按行列进行等分得到每个子图像的纹理坐标范围
+     				// uv+=float2(rowIndex/_HorizontalCount,-colIndex/_VerticalCount);
+     				uv.x+=colIndex/_HorizontalCount;//使用当前行列数对上面等分后的结果进行偏移
+     				uv.y-=rowIndex/_VerticalCount;
+     				fixed4 pixel=tex2D(_ImageSequence,uv);
+     				pixel.rgb*=_Color;
+     				return pixel;
+     			}
+     ```
+
+2. 滚动纹理背景
+
+   * 本质算法：对纹理进行缩放偏移计算后，加上随时间变化的偏移 （水平滚动只加x即可）
+
+   * 代码块如下
+
+     ```
+     				//frac 返回参数的小数部分。因为只横向滚动 所以时间只作用在x
+     				o.uv.xy=TRANSFORM_TEX(i.texcoord,_MainTex)+frac(float2(_Time.y*_ScrollSpeedX1,0));
+     				o.uv.zw=TRANSFORM_TEX(i.texcoord,_DetailTex)+frac(float2(_Time.y*_ScrollSpeedX2,0));
+     ```
+
+## 顶点动画
+
+1. 河流波浪
+   * 

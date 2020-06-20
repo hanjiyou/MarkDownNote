@@ -25,6 +25,7 @@
 ## 三、其他问题
 
 1. `git pull`时提示"Auto packing the repository for optimum performance.You may also run 'git gc' manually."
+   
    * 方法1：执行命令 `git gc`
    * 方法2:执行命令 `git fsck --lost-found`、`git gc --prune=now`
 2. 回滚commit但没push的修改(会从本地log记录删除)
@@ -33,6 +34,7 @@
 3. 想恢复到之前某个提交的版本，且那个版本之后提交的版本我们都不要了
    
    * `git reset --hard 目标版本号`
+   * 如果远端工程有问题，这时候reset --hard后push会报错。在保证本地正确以后，可以直接把本地强制push到远端: `git push -f -u origin master  `，即加个 `-f`参数
 4. 撤销之前的reset --hard的方法
    * `git reflog` 查看所有当前本地仓库的日志，找到reset的前一条的版本号
    * `git reset --hard ***` 就能回滚我们的回滚操作了
