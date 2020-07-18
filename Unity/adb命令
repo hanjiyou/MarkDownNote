@@ -1,0 +1,6 @@
+1. 查看设备 `adb devices`
+2. 安装指定app `adb install *`
+3. 查看日志
+   * 过滤Unity的日志 `adb logcat -s Unity` (注意Unity 第一个字母要大写)
+   * 过滤指定包名的日志 ``
+
