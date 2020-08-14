@@ -34,7 +34,7 @@
 3. 想恢复到之前某个提交的版本，且那个版本之后提交的版本我们都不要了
    
    * `git reset --hard 目标版本号`
-   * 如果远端工程有问题，这时候reset --hard后push会报错。在保证本地正确以后，可以直接把本地强制push到远端: `git push -f -u origin master  `，即加个 `-f`参数
+   * 如果远端工程有问题，这时候reset --hard后push会报错(**本地分支回滚后，版本将落后远程分支，必须使用强制推送覆盖远程分支，否则无法推送到远程分支**)。在保证本地正确以后，可以直接把本地强制push到远端: `git push -f -u origin master  `，即加个 `-f`参数
 4. 撤销之前的reset --hard的方法
    * `git reflog` 查看所有当前本地仓库的日志，找到reset的前一条的版本号
    * `git reset --hard ***` 就能回滚我们的回滚操作了
@@ -63,3 +63,6 @@
 
 1. 查看仓库地址 `git remote -v`![image-20200608145421189](D:\Note\MarkDownNote\CommonTools\_v_images\image-20200608145421189.png)
 
+2. 想取消提交记录中的某一次提交，不影响后面的提交
+
+   ![image-20200806143733779](D:\Note\MarkDownNote\CommonTools\_v_images\image-20200806143733779.png)
