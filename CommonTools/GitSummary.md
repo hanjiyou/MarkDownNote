@@ -66,3 +66,5 @@
 2. 想取消提交记录中的某一次提交，不影响后面的提交
 
    ![image-20200806143733779](D:\Note\MarkDownNote\CommonTools\_v_images\image-20200806143733779.png)
+
+3. 查看git的安装地址: `where git`

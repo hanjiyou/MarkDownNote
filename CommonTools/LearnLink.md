@@ -73,6 +73,10 @@
 
 2. [rider新版破解教程](https://zhile.io/2018/08/17/jetbrains-license-server-crack.html)
 
+3. window的bat命令，使用 `%time:~0,2%`截取小时时，如果是上午10.之前，结果会是
+
+    " 0"前面带个空格
+
 # Unity或C#相关
 
 1. [协程底层原理 迭代器+分帧+延迟等待计时器](https://www.cnblogs.com/yespi/p/9847533.html#case1--%E5%88%86%E5%B8%A7)
